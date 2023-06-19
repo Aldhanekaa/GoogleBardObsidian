@@ -104,8 +104,4 @@ export class BardObsidianView extends ItemView {
 	async onClose() {
 		this.reactRoot.unmount();
 	}
-
-	settingsChanged() {
-		console.log(this.settings, this.prevsettings);
-	}
 }

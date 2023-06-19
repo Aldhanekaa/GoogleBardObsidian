@@ -4,6 +4,7 @@ import {
 	Plugin,
 	PluginSettingTab,
 	Setting,
+	WorkspaceLeaf,
 	addIcon,
 } from "obsidian";
 import { BardObsidianView, VIEW_TYPE_BardObsidian } from "src/plugin/view";
@@ -32,34 +33,19 @@ export default class BardObsidian extends Plugin {
 		await this.loadBard();
 		this.chats = new Chats();
 
-		this.registerView(VIEW_TYPE_BardObsidian, (leaf) => {
-			this.chatBardView = new BardObsidianView(
-				leaf,
-				this.settings,
-				this.loadBard,
-				this.chats
-			);
-			return this.chatBardView;
-		});
+		this.registerView(
+			VIEW_TYPE_BardObsidian,
+			(leaf) =>
+				new BardObsidianView(
+					leaf,
+					this.settings,
+					this.loadBard,
+					this.chats
+				)
+		);
 
 		this.registerEvent(
-			this.app.workspace.on("file-open", () => {
-				console.log("ss");
-			})
-		);
-		this.registerEvent(
-			this.app.workspace.on("active-leaf-change", async (e) => {
-				if (e?.view.getViewType() == VIEW_TYPE_BardObsidian) {
-					if (
-						this.bardConfig == undefined ||
-						this.prevSettings.secretKey != this.settings.secretKey
-					) {
-						await this.loadBard();
-						this.chatBardView?.setChat(new Chats());
-					}
-					// console.log("lets go");
-				}
-			})
+			this.app.workspace.on("active-leaf-change", this.onActiveLeafChange)
 		);
 
 		this.addRibbonIcon("sparkles", "Open Bard", () => {
@@ -69,7 +55,22 @@ export default class BardObsidian extends Plugin {
 		this.addSettingTab(new BardObsidianSettingTab(this.app, this));
 		// this.bard();
 	}
-	onunload() {}
+
+	onActiveLeafChange = async (e: WorkspaceLeaf) => {
+		if (e?.view.getViewType() == VIEW_TYPE_BardObsidian) {
+			if (
+				this.bardConfig == undefined ||
+				this.prevSettings.secretKey != this.settings.secretKey
+			) {
+				await this.loadBard();
+				this.chatBardView?.setChat(new Chats());
+			}
+			// console.log("lets go");
+		}
+	};
+	onunload() {
+		this.app.workspace.off("active-leaf-change", this.onActiveLeafChange);
+	}
 
 	/* COMMANDS */
 	newChat() {}
@@ -131,9 +132,6 @@ export default class BardObsidian extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
-		if (this.chatBardView) {
-			this.chatBardView.settingsChanged();
-		}
 	}
 }
 
