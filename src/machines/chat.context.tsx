@@ -1,4 +1,4 @@
-import { ActorRefFrom } from "xstate";
+import { ActorRefFrom, assign } from "xstate";
 import { chatMachine } from "./chat";
 import * as React from "react";
 import { useInterpret } from "@xstate/react";
@@ -33,6 +33,13 @@ export const ChatGlobalStateProvider = ({
 					ask: ctx.input,
 				};
 			},
+		},
+		actions: {
+			newChat: assign((ctx, event) => {
+				newChat();
+
+				return Object.assign({}, { ...ctx, chats: [] });
+			}),
 		},
 	});
 

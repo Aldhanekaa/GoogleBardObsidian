@@ -1,15 +1,12 @@
 import * as React from "react";
 
 import styled from "styled-components";
-import { MessageCircle } from "lucide-react";
 
 import { useApp } from "../hooks/useApp";
 import ChatsSection from "./chats";
 
-import { LucideIconButton } from "../LucideIconButton";
-import RefreshButton from "./execButtons/Refresh";
-
 import ChatInput from "../chatInput";
+import AppCommands from "./AppCommands/index";
 
 const AppContainer = styled.div`
 	height: 100%;
@@ -23,13 +20,6 @@ const AppContainer = styled.div`
 const CommandsAppContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
-`;
-
-const AppCommandButtonsContainer = styled.div`
-	width: 100%;
-	display: flex;
-	justify-content: center;
 	gap: 10px;
 `;
 
@@ -47,15 +37,7 @@ export default function ReactView() {
 			<ChatsSection />
 
 			<CommandsAppContainer>
-				<AppCommandButtonsContainer>
-					<RefreshButton />
-					<LucideIconButton
-						aria-label="New Chat"
-						aria-labeldelay="300"
-					>
-						<MessageCircle width="15" height="15" />
-					</LucideIconButton>
-				</AppCommandButtonsContainer>
+				<AppCommands />
 				<ChatInput />
 			</CommandsAppContainer>
 		</AppContainer>

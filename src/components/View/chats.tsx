@@ -1,4 +1,4 @@
-import { Copy, Sparkles, User } from "lucide-react";
+import { Check, Copy, Sparkles, User } from "lucide-react";
 import * as React from "react";
 import styled from "styled-components";
 import { LucideIconButton } from "../LucideIconButton";
@@ -8,6 +8,7 @@ import { useActor } from "@xstate/react";
 import { queryBardValidRes } from "bard-ai";
 
 import ReactMarkdown from "../memoizedMarkdownReact";
+import { Notice } from "obsidian";
 
 const ChatsContainer = styled.div`
 	display: flex;
@@ -23,6 +24,10 @@ const ChatCardStyled = styled.div`
 		flex-direction: column;
 		justify-content: center;
 		gap: 10px;
+
+		li {
+			margin-bottom: 15px;
+		}
 	}
 	p {
 		padding: 0;
@@ -75,6 +80,23 @@ function RenderChatCard({
 	maxLen: number;
 	idx: number;
 }) {
+	const [state, setState] = React.useState("idle");
+
+	const copyToClipboard = () => {
+		if (state == "idle") {
+			if (typeof chat == "string") navigator.clipboard.writeText(chat);
+			else {
+				navigator.clipboard.writeText(chat.content);
+			}
+
+			setState("copied");
+			new Notice("Copied to Clipboard!");
+			setTimeout(() => {
+				setState("idle");
+			}, 500);
+		}
+	};
+
 	if (typeof chat == "string") {
 		return (
 			<ChatCardStyled>
@@ -107,8 +129,16 @@ function RenderChatCard({
 				</div>
 
 				<div>
-					<ChatCardExeButton aria-label="Copy" aria-label-delay="300">
-						<Copy width="15" height="15" color="#5b99ef" />
+					<ChatCardExeButton
+						aria-label="Copy"
+						aria-label-delay="300"
+						onClick={copyToClipboard}
+					>
+						{state == "copied" ? (
+							<Check width="15" height="15" color="#5b99ef" />
+						) : (
+							<Copy width="15" height="15" color="#5b99ef" />
+						)}
 					</ChatCardExeButton>
 				</div>
 			</div>

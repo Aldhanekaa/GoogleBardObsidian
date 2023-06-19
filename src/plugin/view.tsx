@@ -80,7 +80,10 @@ export class BardObsidianView extends ItemView {
 		);
 	}
 
-	newChat() {}
+	newChat = () => {
+		console.log("new chat");
+		this.chats.newChat();
+	};
 
 	chatToBard = async (ask: string) => {
 		console.log(ask);

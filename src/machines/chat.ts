@@ -23,6 +23,9 @@ export const chatMachine = createMachine(
 		states: {
 			inputting: {
 				on: {
+					NEW_CHAT: {
+						actions: "newChat",
+					},
 					SUBMIT: {
 						actions: assign<
 							chatMachineContextT,

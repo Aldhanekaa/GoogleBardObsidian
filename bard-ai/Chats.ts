@@ -5,6 +5,7 @@ export type ChatsT = Array<queryBardValidRes | string>;
 export default class Chats {
 	chat: Chat;
 	chats: Array<queryBardValidRes | string> = [];
+
 	constructor() {
 		this.chat = new Bard.Chat();
 	}
@@ -21,4 +22,8 @@ export default class Chats {
 
 		return response;
 	}
+
+	newChat = () => {
+		this.chat = new Bard.Chat();
+	};
 }
