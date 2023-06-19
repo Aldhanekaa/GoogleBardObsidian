@@ -1,11 +1,11 @@
 {
 	"id": "google-bard-obsidian",
 	"name": "Google Bard Obsidian",
-	"version": "1.0.0",
+	"version": ".3.0",
 	"minAppVersion": "0.15.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
-	"isDesktopOnly": false
+	"description": "Explore new possibilities of learning with Integration of Google Bard in your Obsidian App! It's totally free unlike ChatGPT! It also can show images from your question!",
+	"author": "Aldhanekaa",
+	"authorUrl": "https://github.com/Aldhanekaa",
+	"fundingUrl": "",
+	"isDesktopOnly": true
 }
