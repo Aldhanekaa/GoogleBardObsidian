@@ -1,8 +1,6 @@
 # 💬 Google Bard Obsidian
 
-Bard assistant by Google to help you study and taking notes, and memorise materials easier!
-
-Explore new possibilities of learning with Integration of Google Bard in your Obsidian App! It's totally free unlike ChatGPT! It also can show images from your question!
+Bard assistant by Google to help you study and taking notes, and memorise materials easier! Thus plugin is totally free unlike ChatGPT, and it can also shows images, and you are able to copy the responses to be moved into your notes!
 
 ## Obtaining Authentication
 

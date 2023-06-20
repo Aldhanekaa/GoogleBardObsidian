@@ -68,9 +68,6 @@ export default class BardObsidian extends Plugin {
 			// console.log("lets go");
 		}
 	};
-	onunload() {
-		this.app.workspace.off("active-leaf-change", this.onActiveLeafChange);
-	}
 
 	/* COMMANDS */
 	newChat() {}

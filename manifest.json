@@ -1,9 +1,9 @@
 {
 	"id": "google-bard-assistant",
 	"name": "Google Bard Assistant",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"minAppVersion": "0.15.0",
-	"description": "Explore new possibilities of learning with Integration of Google Bard in your Obsidian App! It's totally free unlike ChatGPT! It also can show images from your question!",
+	"description": "Explore new possibilities of learning with Integration of Google Bard! It's totally free! It also can show images from your question!",
 	"author": "Aldhanekaa",
 	"authorUrl": "https://github.com/Aldhanekaa",
 	"fundingUrl": "",
