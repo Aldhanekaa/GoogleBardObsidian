@@ -1,6 +1,6 @@
-# 💬 Google Bard Obsidian
+# 💬 Google Bard Assistant Obsidian
 
-Bard assistant by Google to help you study and taking notes, and memorise materials easier! Thus plugin is totally free unlike ChatGPT, and it can also shows images, and you are able to copy the responses to be moved into your notes!
+Bard assistant by Google to help you study and taking notes, and memorise materials easier! It's totally free unlike ChatGPT, and it can also shows images, and you are able to copy the responses to be moved into your notes!
 
 ## Obtaining Authentication
 
