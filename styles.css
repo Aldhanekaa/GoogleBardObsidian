@@ -23,6 +23,14 @@ If your plugin does not need CSS, delete this file.
 	gap: 10px;
 }
 
+/* AppCommands/index.tsx */
+.AppCommandButtonsContainer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
 /* chats.tsx */
 .ChatsContainer {
 	display: flex;

@@ -85,7 +85,7 @@ function RenderChatCard({
 						src="https://www.gstatic.com/lamda/images/sparkle_resting_v2_darkmode_2bdb7df2724e450073ede.gif"
 					></img>
 				) : (
-					<Sparkles color="#2e80f2" />
+					<Sparkles color="#2e80f2" width="35px" height="35px" />
 				)}
 			</div>
 			<div className="contentContainer">

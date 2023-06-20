@@ -1,21 +1,14 @@
 import * as React from "react";
-import styled from "styled-components";
 
 import RefreshButton from "../AppCommands/Refresh";
 import { MessageCircle } from "lucide-react";
 import { ChatGlobalContext } from "src/machines/chat.context";
 
-const AppCommandButtonsContainer = styled.div`
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-`;
 export default function AppCommands() {
 	const globalContext = React.useContext(ChatGlobalContext);
 
 	return (
-		<AppCommandButtonsContainer>
+		<div className="AppCommandButtonsContainer">
 			<RefreshButton />
 			<button
 				id="LucideIconButton"
@@ -29,6 +22,6 @@ export default function AppCommands() {
 			>
 				<MessageCircle width="15" height="15" />
 			</button>
-		</AppCommandButtonsContainer>
+		</div>
 	);
 }
