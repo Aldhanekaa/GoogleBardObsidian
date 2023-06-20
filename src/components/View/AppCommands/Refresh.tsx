@@ -1,13 +1,13 @@
 import * as React from "react";
 import { RotateCcw } from "lucide-react";
-import { LucideIconButton } from "../../LucideIconButton";
 import { ChatGlobalContext } from "src/machines/chat.context";
 
 export default function RefreshButton() {
 	const GlobalContext = React.useContext(ChatGlobalContext);
 
 	return (
-		<LucideIconButton
+		<button
+			id="LucideIconButton"
 			onClick={() => {
 				GlobalContext.loadBard();
 			}}
@@ -15,6 +15,6 @@ export default function RefreshButton() {
 			aria-label-delay="300"
 		>
 			<RotateCcw width="15" height="15" />
-		</LucideIconButton>
+		</button>
 	);
 }

@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { LucideIconButton } from "../../LucideIconButton";
 import RefreshButton from "../AppCommands/Refresh";
 import { MessageCircle } from "lucide-react";
 import { ChatGlobalContext } from "src/machines/chat.context";
@@ -18,7 +17,8 @@ export default function AppCommands() {
 	return (
 		<AppCommandButtonsContainer>
 			<RefreshButton />
-			<LucideIconButton
+			<button
+				id="LucideIconButton"
 				onClick={() => {
 					globalContext.chatService.send({
 						type: "NEW_CHAT",
@@ -28,7 +28,7 @@ export default function AppCommands() {
 				aria-labeldelay="300"
 			>
 				<MessageCircle width="15" height="15" />
-			</LucideIconButton>
+			</button>
 		</AppCommandButtonsContainer>
 	);
 }
