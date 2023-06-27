@@ -21,7 +21,6 @@ export const init = async (sessionID) => {
 		url: "https://bard.google.com/",
 		method: "GET",
 		headers: session.headers,
-
 		credentials: "include",
 	});
 	console.log("DATA", response.text);
