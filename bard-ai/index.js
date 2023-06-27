@@ -1,20 +1,9 @@
-import {
-	Session,
-	askAI as askAIT,
-	formatMarkdown as formatMarkdownT,
-	images as imagesT,
-	init as initT,
-	queryBard as queryBardT,
-	Chat as ChatT,
-	IdsT,
-} from "bard-ai";
 import { requestUrl } from "obsidian";
 
 /* eslint-disable no-mixed-spaces-and-tabs */
-let session: Session;
-let SNlM0e: string;
+let session, SNlM0e;
 
-export const init: initT = async (sessionID) => {
+export const init = async (sessionID) => {
 	session = {
 		baseURL: "https://bard.google.com",
 		headers: {
@@ -32,28 +21,29 @@ export const init: initT = async (sessionID) => {
 		url: "https://bard.google.com/",
 		method: "GET",
 		headers: session.headers,
-		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-	});
 
-	const data = response.text;
-	// console.log(response, sessionID);
+		credentials: "include",
+	});
+	console.log("DATA", response.text);
+
+	const data = await response.text;
 
 	const match = data.match(/SNlM0e":"(.*?)"/);
+	console.log("DATA", data, match[1]);
 
 	if (match) SNlM0e = match[1];
-	else
-		throw new Error("Could not get Google Bard. Please Check Your API Key");
+	else throw new Error("Could not get Google Bard.");
 
 	return SNlM0e;
 };
 
-export const queryBard: queryBardT = async (message, ids = {}) => {
+export const queryBard = async (message, ids = {}) => {
+	console.log("SNlM0e", SNlM0e);
 	if (!SNlM0e)
 		throw new Error("Make sure to call Bard.init(SESSION_ID) first.");
 
-	// console.log(message, ids);
 	// Parameters and POST data
-	const params: Record<string, string> = {
+	const params = {
 		bl: "boq_assistant-bard-web-server_20230613.09_p0",
 		_reqID: ids._reqID ? `${ids._reqID}` : "0",
 		rt: "c",
@@ -65,12 +55,12 @@ export const queryBard: queryBardT = async (message, ids = {}) => {
 		ids ? Object.values(ids).slice(0, 3) : [null, null, null],
 	];
 
-	const data: Record<string, string> = {
+	const data = {
 		"f.req": JSON.stringify([null, JSON.stringify(messageStruct)]),
 		at: SNlM0e,
 	};
 
-	const url = new URL(
+	let url = new URL(
 		"/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate",
 		session.baseURL
 	);
@@ -79,74 +69,71 @@ export const queryBard: queryBardT = async (message, ids = {}) => {
 		url.searchParams.append(key, params[key])
 	);
 
-	let formBody: Array<any> | string = [];
+	let formBody = [];
 
-	for (const property in data) {
-		const encodedKey = encodeURIComponent(property);
-		const encodedValue = encodeURIComponent(data[property]);
+	for (let property in data) {
+		let encodedKey = encodeURIComponent(property);
+		let encodedValue = encodeURIComponent(data[property]);
 		formBody.push(encodedKey + "=" + encodedValue);
 	}
 
 	formBody = formBody.join("&");
 
-	// console.log(formBody, url.toString());
+	// console.log("FORM BODY", formBody);
 	const response = await requestUrl({
 		url: url.toString(),
 		method: "POST",
 		headers: session.headers,
 		body: formBody,
+		credentials: "include",
 	});
-	// console.log("RES", response);
-	const responseData = response.text;
-	// console.log(responseData, responseData);
+	// console.log("response", response);
+
+	const responseData = await response.text;
+
 	const chatData = JSON.parse(responseData.split("\n")[3])[0][2];
+	// console.log(SNlM0e, responseData, chatData);
 
 	// Check if there is data
 	if (!chatData) {
-		return `Google Bard encountered an error ${responseData}.`;
+		throw new Error(`Google Bard encountered an error ${responseData}.`);
 	}
-
-	// console.log("chatData", chatData);
 
 	// Get important data, and update with important data if set to do so
 	const jsonChatData = JSON.parse(chatData);
+	// console.log(jsonChatData);
 
-	const text: string = jsonChatData[0][0];
+	let text = jsonChatData[4][0][1][0];
 
-	const images: imagesT = jsonChatData[4][0][4]
-		? jsonChatData[4][0][4].map((x: any) => {
+	let images = jsonChatData[4][0][4]
+		? jsonChatData[4][0][4].map((x) => {
 				return {
 					tag: x[2],
 					url: x[0][5].match(/imgurl=([^&%]+)/)[1],
 				};
 		  })
 		: undefined;
-	const conversationID: string = jsonChatData[1][0];
-	const responseID: string = jsonChatData[1][1];
-	const choiceID: string = jsonChatData[4][0][0];
-	//@ts-ignore
-	const rID: string = parseInt(ids._reqID ?? 0) + 100000;
 
 	return {
 		content: formatMarkdown(text, images),
 		images: images,
 		ids: {
 			// Make sure kept in order, because using Object.keys() to query above
-			conversationID: conversationID,
-			responseID: responseID,
-			choiceID: choiceID,
-			// @ts-ignore
-			_reqID: rID,
+			conversationID: jsonChatData[1][0],
+			responseID: jsonChatData[1][1],
+			choiceID: jsonChatData[4][0][0],
+			_reqID: parseInt(ids._reqID ?? 0) + 100000,
 		},
 	};
 };
 
-const formatMarkdown: formatMarkdownT = (text, images) => {
+const formatMarkdown = (text, images) => {
 	if (!images) return text;
 
 	const formattedTags = new Map();
 
-	for (const imageData of images) {
+	for (let imageData of images) {
+		// This can be optimized? `[...slice...]` is equal to `original`
 		const formattedTag = `![${imageData.tag.slice(1, -1)}](${
 			imageData.url
 		})`;
@@ -163,41 +150,28 @@ const formatMarkdown: formatMarkdownT = (text, images) => {
 		}
 	}
 
-	for (const [tag, formattedTag] of formattedTags) {
+	for (let [tag, formattedTag] of formattedTags) {
 		text = text.replace(tag, formattedTag);
 	}
 
 	return text;
 };
 
-export const askAI: askAIT = async (message, useJSON = false) => {
-	const qBardRes = await queryBard(message);
-
-	if (typeof qBardRes != "string") {
-		if (useJSON) return qBardRes;
-		else return qBardRes.content;
-	}
-	return undefined;
+export const askAI = async (message, useJSON = false) => {
+	if (useJSON) return await queryBard(message);
+	else return (await queryBard(message)).content;
 };
 
-export class Chat implements ChatT {
-	ids: IdsT | undefined | Record<string, string>;
-	constructor(ids?: IdsT) {
-		this.ids = ids ? ids : {};
+export class Chat {
+	constructor(ids) {
+		this.ids = ids;
 	}
 
-	async ask(message: string, useJSON = false) {
-		// if (typeof this.ids != "string") {
-		const request = await queryBard(message, this.ids);
-		if (typeof request != "string") {
-			this.ids = { ...request.ids };
-			if (useJSON) return request;
-			else return request.content;
-		}
-
-		return request;
-		// }
-		// return "";
+	async ask(message, useJSON = false) {
+		let request = await queryBard(message, this.ids);
+		this.ids = { ...request.ids };
+		if (useJSON) return request;
+		else return request.content;
 	}
 
 	export() {

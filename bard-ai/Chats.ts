@@ -11,7 +11,10 @@ export default class Chats {
 	}
 
 	async askAI(prompt: string) {
+		// console.log(prompt);
 		const response = await this.chat.ask(prompt, true);
+		// console.log("RESPONSE", response);
+
 		if (typeof response != "string") {
 			this.chats.push({
 				content: response.content,

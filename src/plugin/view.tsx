@@ -1,7 +1,7 @@
 import { Root, createRoot as CreateRoot } from "react-dom/client";
 import * as React from "react";
 
-import { ItemView, Notice, WorkspaceLeaf } from "obsidian";
+import { ItemView, Notice, WorkspaceLeaf, requestUrl } from "obsidian";
 
 import ReactView from "../components/View/app";
 import { AppContext } from "../components/hooks/context";
@@ -59,6 +59,7 @@ export class BardObsidianView extends ItemView {
 	}
 
 	async onOpen() {
+		console.log(requestUrl);
 		const container = this.containerEl.children[1];
 		this.reactRoot = CreateRoot(container);
 
