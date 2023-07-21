@@ -28,7 +28,7 @@ export const init = async (sessionID) => {
 	const data = await response.text;
 
 	const match = data.match(/SNlM0e":"(.*?)"/);
-	console.log("DATA", data, match[1]);
+	console.log("DATA", data, match);
 
 	if (match) SNlM0e = match[1];
 	else throw new Error("Could not get Google Bard.");
@@ -41,25 +41,28 @@ export const queryBard = async (message, ids = {}) => {
 	if (!SNlM0e)
 		throw new Error("Make sure to call Bard.init(SESSION_ID) first.");
 
-	// Parameters and POST data
+	// HTTPS parameters
 	const params = {
-		bl: "boq_assistant-bard-web-server_20230613.09_p0",
-		_reqID: ids._reqID ? `${ids._reqID}` : "0",
+		bl: "boq_assistant-bard-web-server_20230711.08_p0",
+		_reqID: ids?._reqID ?? "0",
 		rt: "c",
 	};
 
-	const messageStruct = [
-		[message],
-		null,
-		ids ? Object.values(ids).slice(0, 3) : [null, null, null],
-	];
+	// If IDs are provided, but doesn't have every one of the expected IDs, error
+	const messageStruct = [[message], null, [null, null, null]];
 
+	if (ids) {
+		const { conversationID, responseID, choiceID } = ids;
+		messageStruct[2] = [conversationID, responseID, choiceID];
+	}
+
+	// HTTPs data
 	const data = {
 		"f.req": JSON.stringify([null, JSON.stringify(messageStruct)]),
 		at: SNlM0e,
 	};
 
-	let url = new URL(
+	const url = new URL(
 		"/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate",
 		session.baseURL
 	);
@@ -68,15 +71,18 @@ export const queryBard = async (message, ids = {}) => {
 		url.searchParams.append(key, params[key])
 	);
 
-	let formBody = [];
-
-	for (let property in data) {
-		let encodedKey = encodeURIComponent(property);
-		let encodedValue = encodeURIComponent(data[property]);
-		formBody.push(encodedKey + "=" + encodedValue);
+	// Append parameters to the URL
+	for (const key in params) {
+		url.searchParams.append(key, params[key]);
 	}
 
-	formBody = formBody.join("&");
+	// Encode the data
+	const formBody = Object.entries(data)
+		.map(
+			([property, value]) =>
+				`${encodeURIComponent(property)}=${encodeURIComponent(value)}`
+		)
+		.join("&");
 
 	// console.log("FORM BODY", formBody);
 	const response = await requestUrl({
@@ -91,7 +97,6 @@ export const queryBard = async (message, ids = {}) => {
 	const responseData = await response.text;
 
 	const chatData = JSON.parse(responseData.split("\n")[3])[0][2];
-	// console.log(SNlM0e, responseData, chatData);
 
 	// Check if there is data
 	if (!chatData) {
@@ -99,28 +104,32 @@ export const queryBard = async (message, ids = {}) => {
 	}
 
 	// Get important data, and update with important data if set to do so
-	const jsonChatData = JSON.parse(chatData);
-	// console.log(jsonChatData);
+	const parsedChatData = JSON.parse(chatData);
+	const bardResponseData = JSON.parse(chatData)[4][0];
 
-	let text = jsonChatData[4][0][1][0];
+	let text = bardResponseData[1][0];
 
-	let images = jsonChatData[4][0][4]
-		? jsonChatData[4][0][4].map((x) => {
-				return {
-					tag: x[2],
-					url: x[0][5].match(/imgurl=([^&%]+)/)[1],
-				};
-		  })
-		: undefined;
+	let images = bardResponseData[4]?.map((x) => {
+		return {
+			tag: x[2],
+			url: x[3][0][0],
+			source: {
+				original: x[0][0][0],
+				website: x[1][0][0],
+				name: x[1][1],
+				favicon: x[1][3],
+			},
+		};
+	});
 
 	return {
 		content: formatMarkdown(text, images),
 		images: images,
 		ids: {
 			// Make sure kept in order, because using Object.keys() to query above
-			conversationID: jsonChatData[1][0],
-			responseID: jsonChatData[1][1],
-			choiceID: jsonChatData[4][0][0],
+			conversationID: parsedChatData[1][0],
+			responseID: parsedChatData[1][1],
+			choiceID: parsedChatData[4][0][0],
 			_reqID: parseInt(ids._reqID ?? 0) + 100000,
 		},
 	};
@@ -129,28 +138,12 @@ export const queryBard = async (message, ids = {}) => {
 const formatMarkdown = (text, images) => {
 	if (!images) return text;
 
-	const formattedTags = new Map();
-
 	for (let imageData of images) {
-		// This can be optimized? `[...slice...]` is equal to `original`
-		const formattedTag = `![${imageData.tag.slice(1, -1)}](${
-			imageData.url
-		})`;
-
-		if (formattedTags.has(imageData.tag)) {
-			const existingFormattedTag = formattedTags.get(imageData.tag);
-
-			formattedTags.set(
-				imageData.tag,
-				`${existingFormattedTag}\n${formattedTag}`
-			);
-		} else {
-			formattedTags.set(imageData.tag, formattedTag);
-		}
-	}
-
-	for (let [tag, formattedTag] of formattedTags) {
-		text = text.replace(tag, formattedTag);
+		const formattedTag = `!${imageData.tag}(${imageData.url})`;
+		text = text.replace(
+			new RegExp(`(?!\\!)\\[${imageData.tag.slice(1, -1)}\\]`),
+			formattedTag
+		);
 	}
 
 	return text;
