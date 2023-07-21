@@ -43,6 +43,8 @@ export class BardObsidianView extends ItemView {
 	}
 
 	icon: string;
+
+	// @ts-ignore
 	reactRoot: Root;
 
 	getViewType(): string {

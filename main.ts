@@ -15,12 +15,15 @@ import Chats from "bard-ai/Chats";
 // Remember to rename these classes and interfaces!
 
 export default class BardObsidian extends Plugin {
+	// @ts-ignore
 	settings: BardObsidianSettings;
+	// @ts-ignore
 	prevSettings: BardObsidianSettings;
 
 	chatBardView?: BardObsidianView;
 	bardConfig: string | Error | undefined;
 
+	// @ts-ignore
 	chats: Chats;
 
 	async onload() {
@@ -45,6 +48,7 @@ export default class BardObsidian extends Plugin {
 		);
 
 		this.registerEvent(
+			//@ts-ignore
 			this.app.workspace.on("active-leaf-change", this.onActiveLeafChange)
 		);
 
@@ -102,7 +106,7 @@ export default class BardObsidian extends Plugin {
 			new Notice("Successfully Loaded Bard");
 			console.log(this.bardConfig);
 		} catch (err) {
-			new Notice(err);
+			if (typeof err == "string") new Notice(err);
 		}
 	}
 
