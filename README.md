@@ -2,6 +2,8 @@
 
 Bard assistant by Google to help you study and taking notes, and memorise materials easier! It's totally free unlike ChatGPT, and it can also shows images, and you are able to copy the responses to be moved into your notes!
 
+You can show the Chat view from command!
+
 ## Obtaining Authentication
 
 1. Log in to your Google account, and visit [Google Bard](https://bard.google.com)
