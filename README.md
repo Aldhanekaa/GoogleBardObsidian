@@ -9,7 +9,7 @@ You can show the Chat view from command, by opening ``with just type in`Open Goo
 1. Log in to your Google account, and visit [Google Bard](https://bard.google.com)
 2. Open the Web Inspector, and go to the "Application" tab.
 3. Click open the `Cookies` dropdown on the sidebar, under storage, and click on the option that says `https://bard.google.com`.
-4. Look for and copy the Cookie labeled `__Secure-1PSID` and `Secure-1PSIDTS`. Make sure you copy the periods at the end as well.
+4. Look for and copy the Cookie labeled `__Secure-1PSID` and `__Secure-1PSIDTS`. Make sure you copy the periods at the end as well.
 
 <img src="./assets/Screenshot 2023-07-19 at 22.26.50.png"></img>
 
