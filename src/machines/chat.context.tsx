@@ -30,10 +30,6 @@ export const ChatGlobalStateProvider = ({
 }: GlobalStateFuncArgument & { children: React.ReactNode }) => {
 	// const e = useApp();
 
-	React.useEffect(() => {
-		console.log("chats.status!", chats.getStatus());
-	}, [chats.status]);
-
 	const chatService = useInterpret(chatMachine, {
 		context: {
 			chats: [],

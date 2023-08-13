@@ -46,6 +46,14 @@ export default class BardObsidian extends Plugin {
 			this.app.workspace.on("active-leaf-change", this.onActiveLeafChange)
 		);
 
+		this.addCommand({
+			id: "google-bard-assistant",
+			name: "Open Google Bard Assistant",
+			callback: () => {
+				this.activateView();
+			},
+		});
+
 		this.addRibbonIcon("sparkles", "Open Bard", () => {
 			this.activateView();
 		});
