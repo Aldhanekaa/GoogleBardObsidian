@@ -2,7 +2,7 @@
 
 Bard assistant by Google to help you study and taking notes, and memorise materials easier! It's totally free unlike ChatGPT, and it can also shows images, and you are able to copy the responses to be moved into your notes!
 
-You can show the Chat view from command, by pressing `⌘` and `P` and just type in `Open Google Bard Assistant`
+_Tips! You can show the Chat view from command, by pressing `⌘` and `P` and just type in `Open Google Bard Assistant`_
 
 ## Obtaining Authentication
 
