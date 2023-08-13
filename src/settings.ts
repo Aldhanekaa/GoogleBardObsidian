@@ -1,7 +1,9 @@
 export interface BardObsidianSettings {
-	secretKey: string;
+	PSID: string;
+	PSIDTS: string;
 }
 
 export const DEFAULT_SETTINGS: BardObsidianSettings = {
-	secretKey: "default",
+	PSID: "default",
+	PSIDTS: "default",
 };

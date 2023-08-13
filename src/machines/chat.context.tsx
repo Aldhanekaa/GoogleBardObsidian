@@ -2,16 +2,19 @@ import { ActorRefFrom, assign } from "xstate";
 import { chatMachine } from "./chat";
 import * as React from "react";
 import { useInterpret } from "@xstate/react";
+import Chats, { StatusObjT } from "bard-ai/Chats";
 
 interface GlobalStateFuncArgument {
 	newChat: () => void;
 	askBard: (ask: string) => void;
 	loadBard: () => void;
+	chats: Chats;
 }
 
 interface ChatGlobalStateContextType {
 	chatService: ActorRefFrom<typeof chatMachine>;
 	loadBard: () => void;
+	status: StatusObjT;
 }
 
 export const ChatGlobalContext = React.createContext(
@@ -23,8 +26,18 @@ export const ChatGlobalStateProvider = ({
 	newChat,
 	children,
 	loadBard,
+	chats,
 }: GlobalStateFuncArgument & { children: React.ReactNode }) => {
+	// const e = useApp();
+
+	React.useEffect(() => {
+		console.log("chats.status!", chats.getStatus());
+	}, [chats.status]);
+
 	const chatService = useInterpret(chatMachine, {
+		context: {
+			chats: [],
+		},
 		services: {
 			chatToBard: async (ctx, event) => {
 				const response = await askBard(ctx.input);
@@ -44,7 +57,9 @@ export const ChatGlobalStateProvider = ({
 	});
 
 	return (
-		<ChatGlobalContext.Provider value={{ chatService, loadBard: loadBard }}>
+		<ChatGlobalContext.Provider
+			value={{ status: chats.status, chatService, loadBard: loadBard }}
+		>
 			{children}
 		</ChatGlobalContext.Provider>
 	);

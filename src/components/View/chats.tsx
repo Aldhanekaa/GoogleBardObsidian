@@ -3,10 +3,10 @@ import * as React from "react";
 
 import { ChatGlobalContext } from "src/machines/chat.context";
 import { useActor } from "@xstate/react";
-import { queryBardValidRes } from "bard-ai";
 
 import ReactMarkdown from "../memoizedMarkdownReact";
 import { Notice } from "obsidian";
+import { IAskResponseJSON } from "bard-ai";
 
 // function RenderContent(content: string, ref: HTMLElement) {
 // 	return MarkdownRenderer.renderMarkdown(content, ref);
@@ -32,7 +32,7 @@ function RenderChatCard({
 	maxLen,
 	idx,
 }: {
-	chat: queryBardValidRes | string;
+	chat: IAskResponseJSON | string;
 	maxLen: number;
 	idx: number;
 }) {
@@ -116,7 +116,12 @@ function RenderChatCard({
 export default function ChatsSection() {
 	const globalContext = React.useContext(ChatGlobalContext);
 	const [state] = useActor(globalContext.chatService);
+
 	const { chats } = state.context;
+
+	React.useEffect(() => {
+		console.log("STATUSS !", JSON.stringify(globalContext.status));
+	}, [globalContext.status]);
 
 	return (
 		<div className="ChatsContainer">

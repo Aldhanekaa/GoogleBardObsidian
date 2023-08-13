@@ -1,10 +1,9 @@
-import { ChatsT } from "bard-ai/Chats";
-import { queryBardValidRes } from "bard-ai";
+import { IAskResponseJSON } from "bard-ai";
 import { EventObject, assign, createMachine } from "xstate";
 
 export type chatMachineContextT = {
 	input: string;
-	chats: ChatsT;
+	chats: Array<IAskResponseJSON | string>;
 };
 
 export const chatMachine = createMachine(
@@ -70,7 +69,7 @@ export const chatMachine = createMachine(
 				EventObject & {
 					data: {
 						ask: string;
-						response: queryBardValidRes;
+						response: IAskResponseJSON;
 					};
 				}
 			>((context, event) => {

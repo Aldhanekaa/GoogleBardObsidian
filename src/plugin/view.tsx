@@ -1,7 +1,7 @@
 import { Root, createRoot as CreateRoot } from "react-dom/client";
 import * as React from "react";
 
-import { ItemView, Notice, WorkspaceLeaf, requestUrl } from "obsidian";
+import { ItemView, Notice, WorkspaceLeaf } from "obsidian";
 
 import ReactView from "../components/View/app";
 import { AppContext } from "../components/hooks/context";
@@ -13,10 +13,10 @@ export const VIEW_TYPE_BardObsidian = "BardObsidian-view";
 
 export class BardObsidianView extends ItemView {
 	viewType = VIEW_TYPE_BardObsidian;
-	loadObsidianBardPlugin: (
-		settingsArg?: BardObsidianSettings,
-		prevSettingsArg?: BardObsidianSettings
-	) => Promise<void>;
+	// loadObsidianBardPlugin: (
+	// 	settingsArg?: BardObsidianSettings,
+	// 	prevSettingsArg?: BardObsidianSettings
+	// ) => Promise<void>;
 	settings: BardObsidianSettings;
 	prevsettings: BardObsidianSettings;
 
@@ -25,20 +25,19 @@ export class BardObsidianView extends ItemView {
 	constructor(
 		leaf: WorkspaceLeaf,
 		settings: BardObsidianSettings,
-		loadObsidianBardPlugin: (
-			settingsArg?: BardObsidianSettings,
-			prevSettingsArg?: BardObsidianSettings
-		) => Promise<void>,
+		// loadObsidianBardPlugin: (
+		// 	settingsArg?: BardObsidianSettings,
+		// 	prevSettingsArg?: BardObsidianSettings
+		// ) => Promise<void>,
 		chats: Chats
 	) {
 		super(leaf);
 		this.icon = "sparkles";
-		this.loadObsidianBardPlugin = loadObsidianBardPlugin;
+		// this.loadObsidianBardPlugin = loadObsidianBardPlugin;
 
 		this.settings = settings;
 		this.prevsettings = Object.assign({}, settings);
 
-		console.log(chats);
 		this.chats = chats;
 	}
 
@@ -56,30 +55,27 @@ export class BardObsidianView extends ItemView {
 	}
 
 	loadbardView() {
-		console.log(this);
-		this.loadObsidianBardPlugin(this.settings, this.prevsettings);
+		// this.loadObsidianBardPlugin(this.settings, this.prevsettings);
 	}
 
 	async onOpen() {
-		console.log(requestUrl);
 		const container = this.containerEl.children[1];
+
 		this.reactRoot = CreateRoot(container);
 
 		this.reactRoot.render(
-			<ChatGlobalStateProvider
-				newChat={this.newChat}
-				askBard={this.chatToBard}
-				loadBard={() => {
-					this.loadObsidianBardPlugin(
-						this.settings,
-						this.prevsettings
-					);
-				}}
-			>
-				<AppContext.Provider value={this.app}>
+			<AppContext.Provider value={this.app}>
+				<ChatGlobalStateProvider
+					newChat={this.newChat}
+					askBard={this.chatToBard}
+					chats={this.chats}
+					loadBard={() => {
+						this.chats.load();
+					}}
+				>
 					<ReactView />
-				</AppContext.Provider>
-			</ChatGlobalStateProvider>
+				</ChatGlobalStateProvider>
+			</AppContext.Provider>
 		);
 	}
 
@@ -98,9 +94,9 @@ export class BardObsidianView extends ItemView {
 
 		return res;
 	};
-	setChat(chats: Chats) {
+	setChat = (chats: Chats) => {
 		this.chats = chats;
-	}
+	};
 
 	/* CONFIGURATIONS */
 

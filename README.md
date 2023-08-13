@@ -2,18 +2,6 @@
 
 Bard assistant by Google to help you study and taking notes, and memorise materials easier! It's totally free unlike ChatGPT, and it can also shows images, and you are able to copy the responses to be moved into your notes!
 
-This plugin is still waiting for final review to be published on Obsidian Community Plugins https://github.com/obsidianmd/obsidian-releases/pull/2065?notification_referrer_id=NT_kwDOBApqmrM2ODA4Mzc5OTIxOjY3NzkxNTE0#event-9576408443
-
-## How to download
-While you are waiting for the official release on Community Plugins, you can download from this repository. Click on [release](https://github.com/Aldhanekaa/GoogleBardObsidian/releases) and choose the [latest release](https://github.com/Aldhanekaa/GoogleBardObsidian/releases/latest).
-
-download the file named `google-bard-assistant.zip`, open it up. 
-
-click on `folder` icon on `community plugins` at settings sidebar (Obsidian Desktop app). It will open folder where all of your obsidian vault plugins are saved. 
-<img src="./assets/Screenshot 2023-07-19 at 22.32.00.png"></img>
-
-Then drag the folder from zip you opened to the folder that is shown to you. Then you can click on the `reload` icon beside the `folder` icon.
- 
 ## Obtaining Authentication
 
 1. Log in to your Google account, and visit [Google Bard](https://bard.google.com)
