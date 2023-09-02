@@ -66,8 +66,7 @@ export default class BardObsidian extends Plugin {
 		if (e?.view.getViewType() == VIEW_TYPE_BardObsidian) {
 			if (
 				this.bard == undefined ||
-				this.chats.prevSettings.PSID != this.chats.settings.PSID ||
-				this.chats.prevSettings.PSIDTS != this.chats.settings.PSIDTS
+				this.chats.prevSettings.Cookie != this.chats.settings.Cookie
 			) {
 				await this.chats.load();
 			}
@@ -125,28 +124,15 @@ export class BardObsidianSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName("PSID Key")
-			.setDesc("Your PSID Google Bard Key")
+			.setName("Cookie Key")
+			.setDesc("Your Cookie Google Bard Key")
 			.addText((text) =>
 				text
 
 					.setPlaceholder("The Key Is On Cookies")
-					.setValue(this.plugin.settings.PSID)
+					.setValue(this.plugin.settings.Cookie)
 					.onChange(async (value) => {
-						this.plugin.settings.PSID = value;
-						await this.plugin.saveSettings();
-					})
-			);
-		new Setting(containerEl)
-			.setName("PSIDTS Key")
-			.setDesc("Your PSIDTS Google Bard Key")
-			.addText((text) =>
-				text
-
-					.setPlaceholder("The Key Is On Cookies")
-					.setValue(this.plugin.settings.PSIDTS)
-					.onChange(async (value) => {
-						this.plugin.settings.PSIDTS = value;
+						this.plugin.settings.Cookie = value;
 						await this.plugin.saveSettings();
 					})
 			);

@@ -7,11 +7,11 @@ _Tips! You can show the Chat view from command, by pressing `⌘` and `P` and ju
 ## Obtaining Authentication
 
 1. Log in to your Google account, and visit [Google Bard](https://bard.google.com)
-2. Open the Web Inspector, and go to the "Application" tab.
-3. Click open the `Cookies` dropdown on the sidebar, under storage, and click on the option that says `https://bard.google.com`.
-4. Look for and copy the Cookie labeled `__Secure-1PSID` and `__Secure-1PSIDTS`. Make sure you copy the periods at the end as well.
+2. Open the Web Inspector, and go to the "Network" tab.
+3. Click open the first item on networks list or look for `:authority:` named `bard.google.com` or `ogs.google.com`.
+4. Under request headers, look for `Cookie` and copy the whole content.
 
-<img src="./assets/Screenshot 2023-07-19 at 22.26.50.png"></img>
+<img src="./assets/Cookie.png"></img>
 
 That's it! Now, put `Google Bard Key` in the Google Bard Assistant settings and you're all good!
 

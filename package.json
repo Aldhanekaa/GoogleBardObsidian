@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.1.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "google-bard-obsidian-plugin",
+	"version": "1.1.1",
+	"description": "Google Bard assistant plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs && node main.js",

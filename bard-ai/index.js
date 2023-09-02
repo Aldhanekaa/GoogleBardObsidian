@@ -51,7 +51,7 @@ class Bard {
 					? Object.entries(cookie)
 							.map(([key, val]) => `${key}=${val};`)
 							.join("")
-					: "__Secure-1PSID=" + cookie,
+					: cookie,
 		};
 
 		let responseText;

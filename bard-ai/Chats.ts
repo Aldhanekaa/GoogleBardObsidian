@@ -55,10 +55,7 @@ export default class Chats {
 		// 	prevSettings = this.prevSettings;
 		// }
 
-		const cookie = {
-			"__Secure-1PSID": this.settings.PSID,
-			"__Secure-1PSIDTS": this.settings.PSIDTS,
-		};
+		const cookie = this.settings.Cookie;
 
 		this.bard = new Bard(cookie, {
 			// @ts-ignore
